@@ -129,7 +129,7 @@ Makefile for building Debian package
 +# End:***
 --- /dev/null
 +++ b/inputconv/Makefile
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,57 @@
 +# Copyright (c) 2000-2013 Yoshihide Yoshimoto
 +######################################################################
 +# $Id: Makefile-dist,v 1.1 2012-11-15 01:43:38 yosimoto Exp $
@@ -162,9 +162,13 @@ Makefile for building Debian package
 +  FFLAGS_EXTRA = -ffpe-summary=none
 +endif
 +
-+FFLAGS = -O3 -msse3 -fno-inline-functions $(FFLAGS_EXTRA)
-+
-+CC = gcc -O3 -msse3 -fno-inline-functions
++ifeq ($(shell uname -m),x86_64)
++  FFLAGS = -O3 -msse3 -fno-inline-functions $(FFLAGS_EXTRA)
++  CC = gcc -O3 -msse3 -fno-inline-functions
++else
++  FFLAGS = -O3 -fno-inline-functions $(FFLAGS_EXTRA)
++  CC = gcc -O3 -fno-inline-functions
++endif
 +#--------------------------------------------------------------------
 +
 +inputconv.o: inputconv.F90 xcf_types.o util.o iounit.o types.o chainjob.o
@@ -185,7 +189,7 @@ Makefile for building Debian package
 +# End:***
 --- a/mdtool/Makefile
 +++ b/mdtool/Makefile
-@@ -21,10 +21,16 @@
+@@ -21,10 +21,20 @@
  # for Intel Linux and Intel Fortran Compiler 11.0
  # tsurugi, nehalem
  #
@@ -199,13 +203,17 @@ Makefile for building Debian package
 +  FFLAGS_EXTRA = -ffpe-summary=none
 +endif
 +
-+FFLAGS = -O3 -msse3 -fno-inline-functions -ffree-line-length-none $(FFLAGS_EXTRA)
++ifeq ($(shell uname -m),x86_64)
++  FFLAGS = -O3 -msse3 -fno-inline-functions -ffree-line-length-none $(FFLAGS_EXTRA)
++else
++  FFLAGS = -O3 -fno-inline-functions -ffree-line-length-none $(FFLAGS_EXTRA)
++endif
 +
 +CC = gcc -O3 -fno-inline-functions
  #--------------------------------------------------------------------
  
  scanmdlog.o: inspectstr.o util.o
-@@ -35,9 +41,14 @@
+@@ -35,9 +45,14 @@
  tailmdlog: tailmdlog.o util.o
  	${FC} -o tailmdlog tailmdlog.o util.o
  
@@ -223,7 +231,7 @@ Makefile for building Debian package
  # End:***
 --- /dev/null
 +++ b/wfchg2pdos/Makefile
-@@ -0,0 +1,54 @@
+@@ -0,0 +1,58 @@
 +# Copyright (c) 2000-2013 Yoshihide Yoshimoto
 +######################################################################
 +# $Id: Makefile-dist,v 1.3 2013-01-24 07:11:51 yosimoto Exp $
@@ -256,9 +264,13 @@ Makefile for building Debian package
 +  FFLAGS_EXTRA = -ffpe-summary=none
 +endif
 +
-+FFLAGS = -O3 -msse3 -fno-inline-functions $(FFLAGS_EXTRA)
-+
-+CC = gcc -O3 -msse3 -fno-inline-functions
++ifeq ($(shell uname -m),x86_64)
++  FFLAGS = -O3 -msse3 -fno-inline-functions $(FFLAGS_EXTRA)
++  CC = gcc -O3 -msse3 -fno-inline-functions
++else
++  FFLAGS = -O3 -fno-inline-functions $(FFLAGS_EXTRA)
++  CC = gcc -O3 -fno-inline-functions
++endif
 +#--------------------------------------------------------------------
 +
 +ltzpdos: ltzpdos.o
